@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shahzodbek Rustamjonov - Frontend Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      * {
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: #f8fafc;
+      }
+
+      .card {
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn {
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .skill-tag {
+        transition: all 0.2s ease;
+      }
+
+      .skill-tag:hover {
+        background: #4f46e5;
+        color: white;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        z-index: 2000;
+        animation: slideIn 0.3s ease;
+        display: none;
+      }
+
+      .notification.show {
+        display: block;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4f46e5, #7c3aed);
+        transition: width 1s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Notification -->
+    <div id="notification" class="notification">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+        <span id="notificationText">Ma'lumot yuborildi!</span>
+      </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+      <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 fade-in">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold text-gray-800">Bog'lanish</h3>
+          <button
+            onclick="closeModal()"
+            class="text-gray-500 hover:text-gray-700 text-2xl"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form onsubmit="submitForm(event)">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Ismingiz</label
+              >
+              <input
+                type="text"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Ismingizni kiriting"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Email</label
+              >
+              <input
+                type="email"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="email@example.com"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Xabar</label
+              >
+              <textarea
+                rows="4"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Xabaringizni yozing..."
+              ></textarea>
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-6 hover:bg-indigo-700 transition"
+          >
+            Yuborish
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+      <div class="container mx-auto max-w-5xl px-4 py-6">
+        <div class="flex justify-between items-center">
+          <h1 class="text-2xl font-bold text-indigo-600">Sh R</h1>
+          <nav class="hidden md:flex gap-6">
+            <a
+              href="#about"
+              class="text-gray-700 hover:text-indigo-600 transition"
+              >Men haqimda</a
+            >
+            <a
+              href="#skills"
+              class="text-gray-700 hover:text-indigo-600 transition"
+              >Texnologiyalar</a
+            >
+            <a
+              href="#projects"
+              class="text-gray-700 hover:text-indigo-600 transition"
+              >Loyihalar</a
+            >
+            <a
+              href="#education"
+              class="text-gray-700 hover:text-indigo-600 transition"
+              >Ta'lim</a
+            >
+          </nav>
+          <button
+            onclick="openModal()"
+            class="bg-indigo-600 text-white px-6 py-2 rounded-lg btn hover:bg-indigo-700"
+          >
+            Bog'lanish
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-20 px-4">
+      <div class="container mx-auto max-w-5xl text-center fade-in">
+        <div
+          class="w-32 h-32 mx-auto bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-6xl mb-6 shadow-lg"
+        >
+          <img src="" alt="" />
+        </div>
+        <h1 class="text-5xl font-bold text-gray-900 mb-4">
+          Shahzodbek Rustamjonov
+        </h1>
+        <p class="text-2xl text-gray-600 mb-8">Frontend Developer</p>
+        <div class="flex justify-center gap-4 flex-wrap">
+          <a
+            href="tel:+998905806738"
+            class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold btn hover:bg-indigo-700"
+          >
+            <i class="fas fa-phone mr-2"></i>+998 90 580 67 38
+          </a>
+          <a
+            href="mailto:rustamjonovshahzodbek0@gmail.com"
+            class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold btn border-2 border-indigo-600 hover:bg-indigo-50"
+          >
+            <i class="fas fa-envelope mr-2"></i>Email
+          </a>
+          <a
+            href="https://github.com/Rustamjonovdev"
+            target="_blank"
+            class="bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold btn hover:bg-gray-900"
+          >
+            <i class="fab fa-github mr-2"></i>GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-5xl px-4 pb-12 space-y-12">
+      <!-- About Section -->
+      <section id="about" class="fade-in">
+        <div class="bg-white rounded-xl shadow-md p-8 card">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4 flex items-center">
+            <i class="fas fa-user text-indigo-600 mr-3"></i>
+            Men haqimda
+          </h2>
+          <p class="text-gray-700 text-lg leading-relaxed">
+            Men Frontend Developer bo'lib, zamonaviy veb-texnologiyalar
+            yordamida foydalanuvchilarga qulay va chiroyli interfeyslar
+            yarataman. Najot Ta'lim va iTeach o'quv markazlarida ta'lim olganman
+            va bir nechta professional loyihalarda ishlaganman.
+          </p>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section id="skills" class="fade-in">
+        <div class="bg-white rounded-xl shadow-md p-8 card">
+          <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-code text-indigo-600 mr-3"></i>
+            Texnologiyalar
+          </h2>
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-semibold text-gray-800">HTML & CSS</span>
+                <span class="text-gray-600">95%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 95%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-semibold text-gray-800">JavaScript</span>
+                <span class="text-gray-600">85%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 85%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-semibold text-gray-800">Vue.js</span>
+                <span class="text-gray-600">80%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 80%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-semibold text-gray-800">Tailwind CSS</span>
+                <span class="text-gray-600">90%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 90%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-3 mt-6">
+            <span
+              class="skill-tag bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-semibold cursor-pointer"
+            >
+              <i class="fab fa-html5 mr-1"></i>HTML5
+            </span>
+            <span
+              class="skill-tag bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-semibold cursor-pointer"
+            >
+              <i class="fab fa-css3-alt mr-1"></i>CSS3
+            </span>
+            <span
+              class="skill-tag bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-semibold cursor-pointer"
+            >
+              <i class="fab fa-js mr-1"></i>JavaScript
+            </span>
+            <span
+              class="skill-tag bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-semibold cursor-pointer"
+            >
+              <i class="fab fa-vuejs mr-1"></i>Vue.js
+            </span>
+            <span
+              class="skill-tag bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-semibold cursor-pointer"
+            >
+              <i class="fas fa-wind mr-1"></i>Tailwind
+            </span>
+            <span
+              class="skill-tag bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-semibold cursor-pointer"
+            >
+              <i class="fab fa-git-alt mr-1"></i>Git
+            </span>
+          </div>
+        </div>
+      </section>
+
+      
+
+      <!-- Education Section -->
+      <section id="education" class="fade-in">
+        <div class="bg-white rounded-xl shadow-md p-8 card">
+          <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-graduation-cap text-indigo-600 mr-3"></i>
+            Ta'lim
+          </h2>
+          <div class="space-y-6">
+            <div class="flex items-start border-l-4 border-indigo-600 pl-6">
+              <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">Najot Ta'lim</h3>
+                <p class="text-gray-600 mb-2">Frontend Development kursi (React JS)</p>
+                <p class="text-gray-500 text-sm">2023 - 2024</p>
+              </div>
+            </div>
+            <div class="flex items-start border-l-4 border-purple-600 pl-6">
+              <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">iTeach</h3>
+                <p class="text-gray-600 mb-2">Frontend Development kursi (Vue JS)</p>
+                <p class="text-gray-500 text-sm">2024 - 2025</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Languages Section -->
+      <section class="fade-in">
+        <div class="bg-white rounded-xl shadow-md p-8 card">
+          <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-language text-indigo-600 mr-3"></i>
+            Tillar
+          </h2>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="text-center p-6 bg-gray-50 rounded-lg">
+              <div class="text-4xl mb-3">🇺🇿</div>
+              <p class="font-bold text-gray-800 mb-1">O'zbek tili</p>
+              <p class="text-indigo-600 font-semibold">Ona tili</p>
+            </div>
+            <div class="text-center p-6 bg-gray-50 rounded-lg">
+              <div class="text-4xl mb-3">🇷🇺</div>
+              <p class="font-bold text-gray-800 mb-1">Rus tili</p>
+              <p class="text-indigo-600 font-semibold">O'rta daraja</p>
+            </div>
+            <div class="text-center p-6 bg-gray-50 rounded-lg">
+              <div class="text-4xl mb-3">🇬🇧</div>
+              <p class="font-bold text-gray-800 mb-1">Ingliz tili</p>
+              <p class="text-indigo-600 font-semibold">Boshlang'ich daraja</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+      <div class="container mx-auto max-w-5xl px-4 text-center">
+        <p class="text-xl mb-6">Men bilan bog'laning!</p>
+        <div class="flex justify-center gap-4 mb-6">
+          <a
+            href="https://t.me/+998905806738"
+            class="w-12 h-12 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"
+          >
+            <i class="fab fa-telegram text-xl"></i>
+          </a>
+          <a
+            href="https://github.com/Rustamjonovdev"
+            class="w-12 h-12 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"
+          >
+            <i class="fab fa-github text-xl"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/shahzodbek-rustamjonov-783a8627a/"
+            class="w-12 h-12 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"
+          >
+            <i class="fab fa-linkedin text-xl"></i>
+          </a>
+          <a
+            href="#"
+            class="w-12 h-12 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"
+          >
+            <i class="fas fa-envelope text-xl"></i>
+          </a>
+        </div>
+        <p class="text-gray-400">
+          © 2024 Shahzodbek Rustamjonov. Barcha huquqlar himoyalangan.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Modal Functions
+      function openModal() {
+        document.getElementById("contactModal").classList.add("active");
+      }
+
+      function closeModal() {
+        document.getElementById("contactModal").classList.remove("active");
+      }
+
+      // Form Submit
+      function submitForm(e) {
+        e.preventDefault();
+        closeModal();
+        showNotification("Xabar muvaffaqiyatli yuborildi! ✅");
+        e.target.reset();
+      }
+
+      // Notification
+      function showNotification(message) {
+        const notification = document.getElementById("notification");
+        document.getElementById("notificationText").textContent = message;
+        notification.classList.add("show");
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 3000);
+      }
+
+      // Project Details
+      function showProjectDetails(title, description) {
+        showNotification(`Loyiha: ${title}`);
+      }
+
+      // Smooth Scroll
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      // Close modal on outside click
+      document
+        .getElementById("contactModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeModal();
+          }
+        });
+    </script>
+  </body>
+</html>
